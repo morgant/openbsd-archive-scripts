@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# unbound_archive- Archive a copy the unbound service under OpenBSD
+
+src="/var/unbound"
+dst="/var/backups/unbound"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  mkdir -p "$dst"
+fi
+tar czvf "${dst}/${host}-unbound-${date}.tar.gz" "$0" "$src"

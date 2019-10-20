@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# nsd_archive- Archive a copy the nsd service under OpenBSD
+
+src="/var/nsd"
+dst="/var/backups/nsd"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  mkdir -p "$dst"
+fi
+tar czvf "${dst}/${host}-nsd-${date}.tar.gz" "$0" "$src"
