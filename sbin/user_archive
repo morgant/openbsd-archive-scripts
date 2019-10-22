@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# user_archive - Archive a user's home folder under OpenBSD
+
+src="/home/$1"
+dst="/home"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+# inclusions & exclusions
+src_tmp="$(mktemp)"
+echo "$0" >> "$src_tmp"
+find "${src}" -mindepth 1 -maxdepth 1 ! -iname ".cache" >> "$src_tmp"
+
+dst_file="${dst}/${host}-$1-${date}.tar.gz"
+tar czvf "$dst_file" -I "$src_tmp"
+chmod 600 "$dst_file"
+chown $1:$1 "$dst_file"
+rm -f "$src_tmp"
