@@ -7,6 +7,7 @@ A small collection of archive scripts for various services running under OpenBSD
 
 * `nsd` (see [nsd(8)](https://man.openbsd.org/nsd.8))
 * `unbound` (see [unbound(8)](https://man.openbsd.org/unbound.8))
+* User homefolder
 
 ## LICENSE
 
