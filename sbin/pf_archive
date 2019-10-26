@@ -1,0 +1,16 @@
+#!/bin/ksh
+
+# pf_archive - Archive a copy of the pf service under OpenBSD
+
+service="pf"
+set -A src "/etc/hosts" "/etc/pf.conf" "/etc/pf.os" "/etc/protocols" "/etc/services"
+dst="/var/backups/${service}"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  mkdir -p "$dst"
+fi
+tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "${src[@]}"
