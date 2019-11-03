@@ -1,0 +1,16 @@
+#!/bin/ksh
+
+# smtpd_archive - Archive a copy of the smtpd service under OpenBSD
+
+service="smtpd"
+set -A src "/etc/mail" "/var/spool/smtpd"
+dst="/var/backups/${service}"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  mkdir -p "$dst"
+fi
+tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "${src[@]}"
