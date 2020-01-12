@@ -1,0 +1,17 @@
+#!/bin/ksh
+
+# apache2_archive - Archive a copy of the apache2 service under OpenBSD
+
+service="apache2"
+set -A src "/etc/apache2" "/var/www"
+dst="$1"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+/usr/local/sbin/apachectl2 stop
+
+tar czvf "${dst}"/${host}-${service}-${date}.tar.gz "$0" "${src[@]}"
+
+/usr/local/sbin/apachectl2 start
