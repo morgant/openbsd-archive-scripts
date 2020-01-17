@@ -1,0 +1,16 @@
+#!/bin/ksh
+
+# relayd_archive - Archive a copy of the relayd service under OpenBSD
+
+service="relayd"
+set -A src "/etc/relayd.conf" "/etc/services" "/etc/ssl"
+dst="/var/backups/${service}"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  mkdir -p "$dst"
+fi
+tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "${src[@]}"
