@@ -4,11 +4,17 @@
 
 service="apache2"
 set -A src "/etc/apache2" "/var/www"
-dst="$1"
+dst="${1:-/var/backups/${service}}"
 
 host="$(hostname)"
 tool="$(basename "$0")"
 date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  echo "ERROR: Destination '${dst}' doesn't exist!"
+  echo "Exiting."
+  exit 1
+fi
 
 /usr/local/sbin/apachectl2 stop
 
