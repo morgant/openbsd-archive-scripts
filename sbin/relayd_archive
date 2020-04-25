@@ -4,13 +4,15 @@
 
 service="relayd"
 set -A src "/etc/relayd.conf" "/etc/services" "/etc/ssl"
-dst="/var/backups/${service}"
+dst="${1:-/var/backups/${service}}"
 
 host="$(hostname)"
 tool="$(basename "$0")"
 date="$(date +%Y%m%d-%H%M%S)"
 
 if [ ! -d "$dst" ]; then
-  mkdir -p "$dst"
+  echo "ERROR: Destination '${dst}' doesn't exist!"
+  echo "Exiting."
+  exit 1
 fi
 tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "${src[@]}"
