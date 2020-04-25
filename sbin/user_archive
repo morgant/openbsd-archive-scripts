@@ -2,20 +2,33 @@
 
 # user_archive - Archive a user's home folder under OpenBSD
 
-src="/home/$1"
-dst="/home"
+user="$2"
+src="/home/${user}"
+dst="${1:-/home}"
 
 host="$(hostname)"
 tool="$(basename "$0")"
 date="$(date +%Y%m%d-%H%M%S)"
+
+if [ -z "$user" ]; then
+  echo "ERROR: Username must be specified!"
+  echo "Exiting."
+  exit 1
+fi
+
+if [ ! -d "$dst" ]; then
+  echo "ERROR: Destination '${dst}' doesn't exist!"
+  echo "Exiting."
+  exit 1
+fi
 
 # inclusions & exclusions
 src_tmp="$(mktemp)"
 echo "$0" >> "$src_tmp"
 find "${src}" -mindepth 1 -maxdepth 1 ! -iname ".cache" >> "$src_tmp"
 
-dst_file="${dst}/${host}-$1-${date}.tar.gz"
+dst_file="${dst}/${host}-${user}-${date}.tar.gz"
 tar czvf "$dst_file" -I "$src_tmp"
 chmod 600 "$dst_file"
-chown $1:$1 "$dst_file"
+chown ${user}:${user} "$dst_file"
 rm -f "$src_tmp"
