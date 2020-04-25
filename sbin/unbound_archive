@@ -2,14 +2,17 @@
 
 # unbound_archive- Archive a copy the unbound service under OpenBSD
 
-src="/var/unbound"
-dst="/var/backups/unbound"
+service="unbound"
+src="/var/${service}"
+dst="${1:-/var/backups/${service}}"
 
 host="$(hostname)"
 tool="$(basename "$0")"
 date="$(date +%Y%m%d-%H%M%S)"
 
 if [ ! -d "$dst" ]; then
-  mkdir -p "$dst"
+  echo "ERROR: Destination '${dst}' doesn't exist!"
+  echo "Exiting."
+  exit 1
 fi
-tar czvf "${dst}/${host}-unbound-${date}.tar.gz" "$0" "$src"
+tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "$src"
