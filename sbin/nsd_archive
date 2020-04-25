@@ -2,14 +2,17 @@
 
 # nsd_archive- Archive a copy the nsd service under OpenBSD
 
-src="/var/nsd"
-dst="/var/backups/nsd"
+service="nsd"
+src="/var/${service}"
+dst="${1:-/var/backups/${service}}"
 
 host="$(hostname)"
 tool="$(basename "$0")"
 date="$(date +%Y%m%d-%H%M%S)"
 
 if [ ! -d "$dst" ]; then
-  mkdir -p "$dst"
+  echo "ERROR: Destination '${dst}' doesn't exist!"
+  echo "Exiting."
+  exit 1
 fi
-tar czvf "${dst}/${host}-nsd-${date}.tar.gz" "$0" "$src"
+tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "$src"
