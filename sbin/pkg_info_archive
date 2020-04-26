@@ -1,0 +1,25 @@
+#!/bin/ksh
+
+# pkg_info_archive - Archive a copy of manually installed packages under OpenBSD
+
+service="pkg_info"
+dst="${1:-/var/backups/${service}}"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  echo "ERROR: Destination '${dst}' doesn't exist!"
+  echo "Exiting."
+  exit 1
+fi
+
+# dump list of manually installed packages for easy import with pkg_add
+pkg_info_list="$(mktemp -t "pkg_info-amz.XXXXXX")"
+pkg_info -amz > "$pkg_info_list"
+
+set -A src "/var/db/pkg" "$pkg_info_list"
+tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "${src[@]}"
+
+rm "$pkg_info_list"
