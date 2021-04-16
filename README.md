@@ -5,6 +5,7 @@ by Morgan Aldridge <morgant@makkintosshu.com>
 
 A small collection of archive scripts for various services running under OpenBSD, incl.:
 
+* `acme-client` (see [acme-client(1)](https://man.openbsd.org/acme-client))
 * `apache2`
 * `nginx`
 * `nsd` (see [nsd(8)](https://man.openbsd.org/nsd.8))
