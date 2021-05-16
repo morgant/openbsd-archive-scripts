@@ -1,0 +1,18 @@
+#!/bin/ksh
+
+# dhcpd_archive - Archive a copy of the dhcpd service under OpenBSD
+
+service="dhcpd"
+set -A src "/etc/dhcpd.conf" "/var/db/dhcpd.leases"
+dst="${1:-/var/backups/${service}}"
+
+host="$(hostname)"
+tool="$(basename "$0")"
+date="$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -d "$dst" ]; then
+  echo "ERROR: Destination '${dst}' doesn't exist!"
+  echo "Exiting."
+  exit 1
+fi
+tar czvf "${dst}/${host}-${service}-${date}.tar.gz" "$0" "${src[@]}"
